@@ -154,24 +154,23 @@ R_API int r_core_bin_set_by_fd(RCore *core, ut64 bin_fd) {
 	return false;
 }
 
-// XXX use API, not cmdf()
 R_API bool r_core_bin_load_structs(RCore *core, const char *file) {
-// 	XXX
-//	r_core_bin_export_info_rad (core);
 	if (!file) {
 		int fd = r_io_fd_get_current (core->io);
 		RIODesc *desc = r_io_desc_get (core->io, fd);
 		if (desc) {
 			file = desc->name;
 		}
-	}
-	if (!file) {
-		return false;
+		if (!file) {
+			return false;
+		}
 	}
 	if (strchr (file, '\'') || strchr (file, '\\')) {
 		eprintf ("Invalid chars found in filename\n");
 		return false;
 	}
+	// XXX use API, not cmdf()
+	// r_core_bin_export_info_rad (core);
 	r_core_cmdf (core, ".!rabin2 -rk '' '%s'", file);
 	return true;
 }
